@@ -76,7 +76,7 @@ greetings = [
     Word('Sweet dreams', 'Lepo spavaj'),
     Word('Good night', 'Laku noć'),
 ]
-calendar = [
+days_of_week = [
     Word('Monday', 'Ponedeljak'),
     Word('Tuesday', 'Utorak'),
     Word('Wednesday', 'Sreda'),
@@ -84,6 +84,8 @@ calendar = [
     Word('Friday', 'Petak'),
     Word('Saturday', 'Subota'),
     Word('Sunday', 'Nedelja'),
+]
+calendar = [
     Word('Weekday', 'Radni dan'),
     Word('Weekend', 'Vikend'),
     Word('January', 'Januar'),
@@ -458,7 +460,6 @@ health = [
     Word('Swollen', 'Otečeno'),
     Word('Temperature', 'Temperatura'),
     Word('Therapy', 'Terapija'),
-    Word('Virus', 'Virus'),
     Word('Vomit', 'Povraćanje'),
     Word('Wound', 'Rana'),
 ]
@@ -555,20 +556,6 @@ food = [
     Word('Ice cream', 'Sladoled'),
     Word('Donut', 'Krofna'),
     Word('Flour', 'Brašno'),
-]
-fruit = [
-    Word('Banana', 'Banana'),
-    Word('Coconut', 'Kokos'),
-    Word('Dragon fruit', 'Zmajevo voće'),
-    Word('Durian', 'Durijan'),
-    Word('Guava', 'Guava'),
-    Word('Jackfruit', 'Nangka'),
-    Word('Lychee', 'Liči'),
-    Word('Mango', 'Mango'),
-    Word('Mangosteen', 'Mangostin'),
-    Word('Orange', 'Pomorandža'),
-    Word('Papaya', 'Papaja'),
-    Word('Pineapple', 'Ananas'),
 
     Word("Milk", "Mleko"),
     Word("Bread", "Hleb"),
@@ -584,16 +571,39 @@ fruit = [
     Word("Candy", "Bombone"),
     Word("Beer", "Pivo"),
     Word("Wine", "Vino"),
-    Word("Apple", "Jabuko"),
     Word("Potato", "Krompir"),
     Word("Sausage", "Kobasica"),
     Word("Tomato", "Paradajz"),
     Word("Sugar", "Šećer"),
     Word("Salt", "So"),
 ]
+fruit = [
+    Word('Banana', 'Banana'),
+    Word('Coconut', 'Kokos'),
+    Word('Dragon fruit', 'Zmajevo voće'),
+    Word('Durian', 'Durijan'),
+    Word('Guava', 'Guava'),
+    Word('Jackfruit', 'Nangka'),
+    Word('Lychee', 'Liči'),
+    Word('Mango', 'Mango'),
+    Word('Mangosteen', 'Mangostin'),
+    Word('Orange', 'Pomorandža'),
+    Word('Papaya', 'Papaja'),
+    Word('Pineapple', 'Ananas'),
+    Word("Apple", "Jabuko"),
+]
+sport = [
+    Word('Ball', 'Lopta'),
+    Word('Football', 'Fudbal'),
+    Word('Basketball', 'Košarka'),
+    Word('Volleyball', 'Otbojka'),
+    Word('Bowling', 'Kuglanje'),
+    Word('Sailing', 'Jedrenje'),
+    Word('Wrestling', 'Rvanje'),
+]
 
 words = [greetings, calendar, conversation, numbers, questions, eating, shopping, direction_words, direction_phrases,
-         emergency, health, sightseeing, hotels, food, fruit, animals]
+         emergency, health, sightseeing, hotels, food, fruit, animals, days_of_week, sport]
 
 idx = []
 for i, w in enumerate(words):
