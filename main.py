@@ -1,4 +1,5 @@
 import logging
+import sys
 from telegram import Update
 from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler
 
@@ -46,6 +47,18 @@ async def next(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 
+async def shutdown(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if update.effective_chat.id != 37129726:
+        return
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text="ok"
+    )
+    import os
+    import signal
+    os.kill(os.getpid(), signal.SIGINT)
+
+
 if __name__ == '__main__':
     secret = open('secret').read()
     application = ApplicationBuilder().token(secret).build()
@@ -55,5 +68,8 @@ if __name__ == '__main__':
 
     next_handler = CommandHandler('next', next)
     application.add_handler(next_handler)
+
+    shutdown_handler = CommandHandler('shutdown', shutdown)
+    application.add_handler(shutdown_handler)
 
     application.run_polling()
