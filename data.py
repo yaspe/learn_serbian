@@ -514,7 +514,7 @@ hotels = [
     Word('I would like to reserve a single room', 'Želim da rezervišem jednokrevetnu sobu'),
     Word('Could you bring my breakfast to room 305?', 'Možete li da donesete moj doručak u sobu 305?'),
     Word('We’ve just finished breakfast', 'Upravo smo završili doručak'),
-    Word('I would like a hotel reservation', 'Želela bih da rezervišem'),
+    Word('I would like a hotel reservation', 'Želeo bih rezervaciju hotela'),
     Word('I canceled my hotel reservation', 'Otkazala sam rezervaciju u hotelu'),
 ]
 food = [
