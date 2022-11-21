@@ -72,7 +72,6 @@ greetings = [
     Word('Beautiful', 'Lepo'),
     Word('Please', 'Molim te'),
     Word('See you', 'Vidimo se)'),
-    Word('Goodbye', 'Doviđenja'),
     Word('Sweet dreams', 'Lepo spavaj'),
     Word('Good night', 'Laku noć'),
 ]
