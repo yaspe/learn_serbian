@@ -601,9 +601,17 @@ sport = [
     Word('Sailing', 'Jedrenje'),
     Word('Wrestling', 'Rvanje'),
 ]
+footwear = [
+    Word('Shoes', 'Cipele'),
+    Word('Boots', 'Čizme'),
+    Word('Sandals', 'Sandale'),
+    Word('Sneakers', 'Patike'),
+    Word('Slippers', 'Papuče'),
+    Word('Footwear', 'Obuća'),
+]
 
 words = [greetings, calendar, conversation, numbers, questions, eating, shopping, direction_words, direction_phrases,
-         emergency, health, sightseeing, hotels, food, fruit, animals, days_of_week, sport]
+         emergency, health, sightseeing, hotels, food, fruit, animals, days_of_week, sport, footwear]
 
 idx = []
 for i, w in enumerate(words):
