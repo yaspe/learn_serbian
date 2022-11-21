@@ -17,8 +17,8 @@ logging.basicConfig(
 )
 
 
-def reply_keyboard_markup():
-    keyboard = [[KeyboardButton("/next")]]
+def reply_keyboard_markup(topic=''):
+    keyboard = [[KeyboardButton("/next")], [KeyboardButton("/next " + topic), KeyboardButton("/topics")]]
     return ReplyKeyboardMarkup(
         keyboard,
         resize_keyboard=True,
@@ -34,15 +34,34 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 
+async def topics(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    markup = ReplyKeyboardMarkup(
+        [[KeyboardButton("/next " + topic)] for topic in data.get_topics()],
+        resize_keyboard=True,
+        one_time_keyboard=True,
+    )
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text="Select a topic",
+        reply_markup=markup
+    )
+
+
 async def next(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    task = Task(*data.get4())
+    text = update.message.text
+    if text != "/next":
+        topic = text.split(' ')[-1]
+    else:
+        topic = data.get_random_topic()
+    task = Task(*data.get_by_topic(topic))
+
     await context.bot.send_poll(
         type="quiz",
         chat_id=update.effective_chat.id,
         question=task.question(),
         options=task.options(),
         correct_option_id=task.correct(),
-        reply_markup=reply_keyboard_markup()
+        reply_markup=reply_keyboard_markup(topic=topic)
     )
 
 
@@ -67,6 +86,9 @@ if __name__ == '__main__':
 
     next_handler = CommandHandler('next', next)
     application.add_handler(next_handler)
+
+    topics_handler = CommandHandler('topics', topics)
+    application.add_handler(topics_handler)
 
     shutdown_handler = CommandHandler('shutdown', shutdown)
     application.add_handler(shutdown_handler)

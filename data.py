@@ -610,19 +610,45 @@ footwear = [
     Word('Footwear', 'Obuća'),
 ]
 
-words = [greetings, calendar, conversation, numbers, questions, eating, shopping, direction_words, direction_phrases,
-         emergency, health, sightseeing, hotels, food, fruit, animals, days_of_week, sport, footwear]
+words = {
+    'greetings': greetings,
+    'calendar': calendar,
+    'conversation': conversation,
+    'numbers': numbers,
+    'questions': questions,
+    'eating': eating,
+    'shopping': shopping,
+    'direction_words': direction_words,
+    'direction_phrases': direction_phrases,
+    'emergency': emergency,
+    'health': health,
+    'sightseeing': sightseeing,
+    'hotels': hotels,
+    'food': food,
+    'fruit': fruit,
+    'animals': animals,
+    'days_of_week': days_of_week,
+    'sport': sport,
+    'footwear': footwear
+}
 
 idx = []
-for i, w in enumerate(words):
-    idx.extend([i]*len(w))
+for topic in words:
+    idx.extend([topic]*len(words[topic]))
 
 
-def get4():
-    topic = words[random.choice(idx)]
-    random.shuffle(topic)
-    return topic[:4]
+def get_topics():
+    return words.keys()
+
+
+def get_random_topic():
+    return random.choice(idx)
+
+
+def get_by_topic(topic):
+    random.shuffle(words[topic])
+    return words[topic][:4]
 
 
 def count():
-    return sum([len(i) for i in words])
+    return sum([len(words[i]) for i in words])
