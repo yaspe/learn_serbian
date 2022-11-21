@@ -569,7 +569,6 @@ food = [
     Word("Cheese", "Sir"),
 
     Word("Candy", "Bombone"),
-    Word("Beer", "Pivo"),
     Word("Wine", "Vino"),
     Word("Potato", "Krompir"),
     Word("Sausage", "Kobasica"),
