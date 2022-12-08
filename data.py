@@ -558,7 +558,6 @@ food = [
 
     Word("Milk", "Mleko"),
     Word("Bread", "Hleb"),
-    Word("water", "voda"),
     Word("Meat", "Meso"),
     Word("Fruit", "Voće"),
     Word("Vegetable", "Povrće"),
