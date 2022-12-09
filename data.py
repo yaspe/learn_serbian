@@ -607,6 +607,26 @@ footwear = [
     Word('Footwear', 'Obuća'),
 ]
 
+clothing = [
+    Word('shirt', 'kośulja'),
+    Word('jeans', 'farmerice'),
+    Word('coat', 'kaput'),
+    Word('dress', 'haljina'),
+    Word('skirt', 'suknja'),
+    Word('suit', 'odelo'),
+    Word('pants', 'pantalone'),
+    Word('tie', 'kravata'),
+    Word('belt', 'kaiś'),
+    Word('raincoat', 'kabanica'),
+    Word('t-shirt', 'majica'),
+    Word('underwear', 'donji veš'),
+    Word('sweater', 'djemper'),
+    Word('jacket', 'jakna'),
+    Word('pocket', 'djep'),
+    Word('button', 'dugme'),
+    Word('zipper', 'rajsferšlus')
+]
+
 words = {
     'greetings': greetings,
     'calendar': calendar,
@@ -626,7 +646,8 @@ words = {
     'animals': animals,
     'days_of_week': days_of_week,
     'sport': sport,
-    'footwear': footwear
+    'footwear': footwear,
+    'clothing': clothing,
 }
 
 idx = []
