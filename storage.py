@@ -29,6 +29,6 @@ class Storage:
 
     def list_users(self):
         cur = self.con.cursor()
-        res = cur.execute("SELECT name FROM users")
-        return [user[0] for user in res.fetchall()]
+        res = cur.execute("SELECT name, chat_id FROM users")
+        return ['%s (%s)' % user for user in res.fetchall()]
 
