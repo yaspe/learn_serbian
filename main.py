@@ -82,7 +82,7 @@ async def stat(update: Update, context: ContextTypes.DEFAULT_TYPE):
     users = storage.list_users()
 
     try:
-        stats = 'Users: %i\n\n%s' % (len(users), ','.join(users))
+        stats = 'Users: %i\n\n%s' % (len(users), '\n'.join(users))
     except Exception as e:
         stats = str(e)
 
