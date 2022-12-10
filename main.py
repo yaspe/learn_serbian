@@ -80,9 +80,15 @@ async def stat(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_chat.id != 37129726:
         return
     users = storage.list_users()
+
+    try:
+        stats = 'Users: %i\n\n%s' % (len(users), ','.join(users))
+    except Exception as e:
+        stats = str(e)
+
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
-        text='Users: %i\n\n%s' % (len(users), ','.join(users))
+        text=stats
     )
 
 
