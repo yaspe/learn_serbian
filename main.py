@@ -1,4 +1,3 @@
-import logging
 from telegram import Update
 from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler
 
@@ -6,15 +5,13 @@ from telegram import KeyboardButton, ReplyKeyboardMarkup
 
 from task import Task
 import data
+from storage import Storage
 
 import random
 from datetime import datetime
 random.seed(datetime.now().microsecond)
 
-logging.basicConfig(
-    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-    level=logging.INFO
-)
+storage = Storage()
 
 
 def reply_keyboard_markup(topic=''):
@@ -48,6 +45,8 @@ async def topics(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 
 async def next(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    storage.add_user(update.effective_chat.username, update.effective_chat.id)
+
     text = update.message.text
     if text != "/next":
         topic = text.split(' ')[-1]
@@ -77,6 +76,15 @@ async def shutdown(update: Update, context: ContextTypes.DEFAULT_TYPE):
     os.kill(os.getpid(), signal.SIGINT)
 
 
+async def stat(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if update.effective_chat.id != 37129726:
+        return
+    await context.bot.send_message(
+        chat_id=update.effective_chat.id,
+        text=str(storage.count_users())
+    )
+
+
 if __name__ == '__main__':
     secret = open('secret').read()
     application = ApplicationBuilder().token(secret).build()
@@ -92,5 +100,8 @@ if __name__ == '__main__':
 
     shutdown_handler = CommandHandler('shutdown', shutdown)
     application.add_handler(shutdown_handler)
+
+    stat_handler = CommandHandler('stat', stat)
+    application.add_handler(stat_handler)
 
     application.run_polling()
