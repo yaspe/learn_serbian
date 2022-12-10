@@ -26,3 +26,9 @@ class Storage:
         cur = self.con.cursor()
         cur.execute("INSERT INTO users (name, chat_id) VALUES (:username, :chat_id)", {'username': username, 'chat_id': chat_id})
         self.con.commit()
+
+    def list_users(self):
+        cur = self.con.cursor()
+        res = cur.execute("SELECT name FROM users")
+        return [user[0] for user in res.fetchall()]
+
