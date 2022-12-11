@@ -1,4 +1,6 @@
 import sqlite3
+import data
+import random
 
 
 class Storage:
@@ -9,6 +11,68 @@ class Storage:
     def create_database(self):
         self.con.execute("CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR, chat_id INTEGER UNIQUE)")
         self.con.commit()
+
+        self.con.execute("CREATE TABLE IF NOT EXISTS topics(id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR UNIQUE)")
+        self.con.commit()
+
+        for topic in data.get_topics():
+            try:
+                self.add_topic(topic)
+            except Exception as e:
+                print(e, topic)
+
+        try:
+            self.con.execute("CREATE TABLE words(id INTEGER PRIMARY KEY AUTOINCREMENT, topic_id INTEGER, eng VARCHAR, srb VARCHAR)")
+            self.con.commit()
+
+            topics = self.list_topics()
+            for topic in topics:
+                for word in data.get_all_by_topic(topic[1]):
+                    self.add_word(topic[0], word.eng, word.srb)
+
+        except Exception as e:
+            print(e)
+
+    def add_word(self, topic_id, eng, srb):
+        cur = self.con.cursor()
+        cur.execute("INSERT INTO words (topic_id, eng, srb) VALUES (:topic_id, :eng, :srb)", {'topic_id': topic_id, 'eng': eng, 'srb': srb})
+        self.con.commit()
+
+    def get_words_by_topic(self, topic_id):
+        cur = self.con.cursor()
+        res = cur.execute("SELECT id, topic_id, eng, srb FROM words")
+        return res.fetchall()
+
+    def get_some_words_by_topic(self, topic_id):
+        words = self.get_words_by_topic(topic_id)
+        random.shuffle(words)
+        return words[:4]
+
+    def count_words(self):
+        cur = self.con.cursor()
+        res = cur.execute("SELECT COUNT(*) FROM words")
+        return res.fetchone()[0]
+
+    def add_topic(self, name):
+        cur = self.con.cursor()
+        cur.execute("INSERT INTO topics (name) VALUES (:name)", {'name': name})
+        self.con.commit()
+
+    def list_topics(self):
+        cur = self.con.cursor()
+        res = cur.execute("SELECT id, name FROM topics")
+        return res.fetchall()
+
+    def list_topics_names(self):
+        return [topic[1] for topic in self.list_topics()]
+
+    def get_random_topic(self):
+        return random.choice(self.list_topics())
+
+    def get_topic_id(self, name):
+        cur = self.con.cursor()
+        res = cur.execute("SELECT id FROM topics WHERE name = :name", {'name': name})
+        return res.fetchone()[0]
 
     def count_users(self):
         cur = self.con.cursor()

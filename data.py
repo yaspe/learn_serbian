@@ -663,6 +663,10 @@ def get_random_topic():
     return random.choice(idx)
 
 
+def get_all_by_topic(topic):
+    return words[topic]
+
+
 def get_by_topic(topic):
     random.shuffle(words[topic])
     return words[topic][:4]

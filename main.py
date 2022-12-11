@@ -4,7 +4,7 @@ from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler
 from telegram import KeyboardButton, ReplyKeyboardMarkup
 
 from task import Task
-import data
+from word import Word
 from storage import Storage
 
 import random
@@ -26,14 +26,14 @@ def reply_keyboard_markup(topic=''):
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await context.bot.send_message(
         chat_id=update.effective_chat.id,
-        text="I'm a Serbian bot and I'l help you to learn Serbian. I know %i phrases. To get a question print or tap /next" % data.count(),
+        text="I'm a Serbian bot and I'l help you to learn Serbian. I know %i phrases. To get a question print or tap /next" % storage.count_words(),
         reply_markup=reply_keyboard_markup()
     )
 
 
 async def topics(update: Update, context: ContextTypes.DEFAULT_TYPE):
     markup = ReplyKeyboardMarkup(
-        [[KeyboardButton("/next " + topic)] for topic in data.get_topics()],
+        [[KeyboardButton("/next " + topic)] for topic in storage.list_topics_names()],
         resize_keyboard=True,
         one_time_keyboard=True,
     )
@@ -49,10 +49,14 @@ async def next(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     text = update.message.text
     if text != "/next":
-        topic = text.split(' ')[-1]
+        name = text.split(' ')[-1]
+        topic = (storage.get_topic_id(name), name)
     else:
-        topic = data.get_random_topic()
-    task = Task(*data.get_by_topic(topic))
+        topic = storage.get_random_topic()
+
+    raw_words = storage.get_some_words_by_topic(topic[0])
+    words = [Word(raw[2], raw[3]) for raw in raw_words]
+    task = Task(*words)
 
     await context.bot.send_poll(
         type="quiz",
@@ -60,7 +64,7 @@ async def next(update: Update, context: ContextTypes.DEFAULT_TYPE):
         question=task.question(),
         options=task.options(),
         correct_option_id=task.correct(),
-        reply_markup=reply_keyboard_markup(topic=topic)
+        reply_markup=reply_keyboard_markup(topic[1])
     )
 
 
