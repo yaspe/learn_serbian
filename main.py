@@ -1,5 +1,5 @@
 from telegram import Update
-from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler
+from telegram.ext import ApplicationBuilder, ContextTypes, CommandHandler, PollHandler
 
 from telegram import KeyboardButton, ReplyKeyboardMarkup
 
@@ -58,14 +58,20 @@ async def next(update: Update, context: ContextTypes.DEFAULT_TYPE):
     words = [Word(raw[2], raw[3]) for raw in raw_words]
     task = Task(*words)
 
-    await context.bot.send_poll(
+    message = await update.effective_message.reply_poll(
         type="quiz",
-        chat_id=update.effective_chat.id,
         question=task.question(),
         options=task.options(),
         correct_option_id=task.correct(),
         reply_markup=reply_keyboard_markup(topic[1])
     )
+    #message = await update.effective_message.reply_poll(
+    #    "How many eggs do you need for a cake?", ["1", "2", "4", "20"], type="quiz", correct_option_id=2
+    #)
+    payload = {
+        message.poll.id: {"chat_id": update.effective_chat.id, "message_id": message.message_id}
+    }
+    context.bot_data.update(payload)
 
 
 async def shutdown(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -96,6 +102,16 @@ async def stat(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
 
 
+async def receive_quiz_answer(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    if update.poll.total_voter_count != 1:
+        return
+    chat_id = context.bot_data[update.poll.id]['chat_id']
+    is_correct = update.poll.options[update.poll.correct_option_id].voter_count == 1
+    storage.add_answer(chat_id, is_correct)
+
+    print(storage.get_user_stat(chat_id))
+
+
 if __name__ == '__main__':
     secret = open('secret').read()
     application = ApplicationBuilder().token(secret).build()
@@ -114,5 +130,7 @@ if __name__ == '__main__':
 
     stat_handler = CommandHandler('stat', stat)
     application.add_handler(stat_handler)
+
+    application.add_handler(PollHandler(receive_quiz_answer))
 
     application.run_polling()

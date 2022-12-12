@@ -15,6 +15,9 @@ class Storage:
         self.con.execute("CREATE TABLE IF NOT EXISTS topics(id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR UNIQUE)")
         self.con.commit()
 
+        self.con.execute("CREATE TABLE IF NOT EXISTS user_stat(user_id INTEGER UNIQUE, total INTEGER, correct INTEGER)")
+        self.con.commit()
+
         for topic in data.get_topics():
             try:
                 self.add_topic(topic)
@@ -32,6 +35,34 @@ class Storage:
 
         except Exception as e:
             print(e)
+
+    def add_answer(self, user_id, is_correct):
+        cur = self.con.cursor()
+        res = cur.execute("SELECT total, correct FROM user_stat WHERE user_id = :user_id", {'user_id': user_id})
+        fetched = res.fetchone()
+
+        if fetched:
+            total = fetched[0] + 1
+            correct = fetched[1] + (1 if is_correct else 0)
+            cur.execute("UPDATE user_stat SET total = :total, correct = :correct WHERE user_id = :user_id",
+                        {'user_id': user_id, 'total': total, 'correct': correct})
+        else:
+            cur = self.con.cursor()
+            cur.execute("INSERT INTO user_stat (user_id, total, correct) VALUES (:user_id, :total, :correct)",
+                        {'user_id': user_id, 'total': 1, 'correct': 1 if is_correct else 0})
+        self.con.commit()
+
+    def get_user_stat(self, user_id):
+        cur = self.con.cursor()
+        res = cur.execute("SELECT total, correct FROM user_stat WHERE user_id = :user_id", {'user_id': user_id})
+        fetched = res.fetchone()
+
+        if not fetched:
+            return 0
+
+        total = fetched[0]
+        correct = fetched[1]
+        return correct/total
 
     def add_word(self, topic_id, eng, srb):
         cur = self.con.cursor()
@@ -94,5 +125,5 @@ class Storage:
     def list_users(self):
         cur = self.con.cursor()
         res = cur.execute("SELECT name, chat_id FROM users")
-        return ['%s (%s)' % user for user in res.fetchall()]
+        return ['%s (%s) = %s' % (user[0], user[1], self.get_user_stat(user[1])) for user in res.fetchall()]
 
