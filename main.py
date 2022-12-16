@@ -65,9 +65,6 @@ async def next(update: Update, context: ContextTypes.DEFAULT_TYPE):
         correct_option_id=task.correct(),
         reply_markup=reply_keyboard_markup(topic[1])
     )
-    #message = await update.effective_message.reply_poll(
-    #    "How many eggs do you need for a cake?", ["1", "2", "4", "20"], type="quiz", correct_option_id=2
-    #)
     payload = {
         message.poll.id: {"chat_id": update.effective_chat.id, "message_id": message.message_id}
     }

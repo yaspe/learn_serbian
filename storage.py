@@ -71,7 +71,7 @@ class Storage:
 
     def get_words_by_topic(self, topic_id):
         cur = self.con.cursor()
-        res = cur.execute("SELECT id, topic_id, eng, srb FROM words")
+        res = cur.execute("SELECT id, topic_id, eng, srb FROM words where topic_id = :topic_id", {'topic_id': topic_id})
         return res.fetchall()
 
     def get_some_words_by_topic(self, topic_id):
