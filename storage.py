@@ -58,7 +58,7 @@ class Storage:
         fetched = res.fetchone()
 
         if not fetched:
-            return 0
+            return 0, 0
 
         total = fetched[0]
         correct = fetched[1]
