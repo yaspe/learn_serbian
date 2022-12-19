@@ -106,8 +106,6 @@ async def receive_quiz_answer(update: Update, context: ContextTypes.DEFAULT_TYPE
     is_correct = update.poll.options[update.poll.correct_option_id].voter_count == 1
     storage.add_answer(chat_id, is_correct)
 
-    print(storage.get_user_stat(chat_id))
-
 
 if __name__ == '__main__':
     secret = open('secret').read()

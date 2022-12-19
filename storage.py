@@ -62,7 +62,7 @@ class Storage:
 
         total = fetched[0]
         correct = fetched[1]
-        return correct/total
+        return correct/total, total
 
     def add_word(self, topic_id, eng, srb):
         cur = self.con.cursor()
